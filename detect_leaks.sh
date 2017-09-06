@@ -2,19 +2,37 @@
 
 set -euf -o pipefail
 
-whitelist="socket(AF_UNIX,
-getsockopt(
-setsockopt(
+whitelist="^[0-9]\+ \+socket(AF_UNIX,
+^[0-9]\+ \+getsockopt(
+^[0-9]\+ \+<... getsockopt resumed>
+^[0-9]\+ \+setsockopt(
+^[0-9]\+ \+listen(
+^[0-9]\+ \+shutdown(
 {sa_family=AF_NETLINK,
-{sa_family=AF_UNIX,
-sendto(.*, NULL, 0) =
-recvfrom(.*, NULL, NULL) =
-getpeername(.*) = -1"
+{sa_family=AF_UNIX[,}]
+^[0-9]\+ \+sendto(.*, NULL, 0) = [0-9]\+$
+^[0-9]\+ \+sendto(.*, NULL, 0 <unfinished ...>$
+^[0-9]\+ \+<... sendto resumed> ) *= [0-9]\+$
+^[0-9]\+ \+recvfrom(.*, NULL, NULL) =
+^[0-9]\+ \+<... recvfrom resumed>.*, NULL, NULL) =
+^[0-9]\+ \+getpeername(.*) = -1
+^[0-9]\+ \+recvmsg(.*{msg_name=NULL.*)
+^[0-9]\+ \+recvmsg(.*{msg_namelen=0}.* = -1
+^[0-9]\+ \+socketpair(AF_UNIX,
+^[0-9]\+ \+sendmsg(.*{msg_name=NULL
+^[0-9]\+ \+getsockname([0-9]\+, \+<unfinished ...>$
+^[0-9]\+ \+recvfrom([0-9]\+, \+<unfinished ...>$
+^[0-9]\+ \+recvmsg([0-9]\+, \+<unfinished ...>$
+^[0-9]\+ \+<... sendmsg resumed> ) *= [0-9]\+$
+^[0-9]\+ \+<... bind resumed> ) *= [0-9]\+$
+^[0-9]\+ \+<... socket resumed> ) *= [0-9]\+$
+^[0-9]\+ \+<... recvmsg resumed>.*{msg_name=NULL.*)
+^[0-9]\+ \+<... connect resumed> ) *= -1"
 
 if [ "$LEAK_CI_ALLOW_IP_PROTOCOL" == "1" ]
 then
     whitelist="${whitelist}
-socket(AF_"
+^[0-9]\+ \+socket(AF_"
     echo "Allowing IP."
 fi
 
