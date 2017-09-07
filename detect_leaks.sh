@@ -29,7 +29,7 @@ whitelist="^[0-9]\+ \+socket(AF_UNIX,
 ^[0-9]\+ \+<... recvmsg resumed>.*{msg_name=NULL.*)
 ^[0-9]\+ \+<... connect resumed> ) *= -1"
 
-if [ "$LEAK_CI_ALLOW_IP_PROTOCOL" == "1" ]
+if [ "${LEAK_CI_ALLOW_IP_PROTOCOL}" == "1" ]
 then
     whitelist="${whitelist}
 ^[0-9]\+ \+socket(AF_"
