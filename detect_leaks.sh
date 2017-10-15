@@ -11,6 +11,7 @@ whitelist="^[0-9]\+ \+socket(AF_UNIX,
 {sa_family=AF_NETLINK,
 {sa_family=AF_UNIX[,}]
 ^[0-9]\+ \+sendto(.*, NULL, 0) = [0-9]\+$
+^[0-9]\+ \+sendto(.*, NULL, 0) = -1
 ^[0-9]\+ \+sendto(.*, NULL, 0 <unfinished ...>$
 ^[0-9]\+ \+<... sendto resumed> ) *= [0-9]\+$
 ^[0-9]\+ \+recvfrom(.*, NULL, NULL) =
@@ -20,13 +21,16 @@ whitelist="^[0-9]\+ \+socket(AF_UNIX,
 ^[0-9]\+ \+recvmsg(.*{msg_namelen=0}.* = -1
 ^[0-9]\+ \+socketpair(AF_UNIX,
 ^[0-9]\+ \+sendmsg(.*{msg_name=NULL
+^[0-9]\+ \+getpeername([0-9]\+, \+<unfinished ...>$
 ^[0-9]\+ \+getsockname([0-9]\+, \+<unfinished ...>$
 ^[0-9]\+ \+recvfrom([0-9]\+, \+<unfinished ...>$
 ^[0-9]\+ \+recvmsg([0-9]\+, \+<unfinished ...>$
 ^[0-9]\+ \+<... sendmsg resumed> ) *= [0-9]\+$
+^[0-9]\+ \+<... setsockopt resumed> ) *= [0-9]\+$
 ^[0-9]\+ \+<... bind resumed> ) *= [0-9]\+$
 ^[0-9]\+ \+<... socket resumed> ) *= [0-9]\+$
 ^[0-9]\+ \+<... recvmsg resumed>.*{msg_name=NULL.*)
+^[0-9]\+ \+<... recvmsg resumed>.*{msg_namelen=0}.*)
 ^[0-9]\+ \+<... connect resumed> ) *= -1"
 
 if [ "${LEAK_CI_ALLOW_IP_PROTOCOL}" == "1" ]
@@ -62,7 +66,7 @@ echo "strace whitelist:
 ${whitelist}"
 echo ""
 
-strace -xx -o >(stdbuf -i 0 -o 0 -e 0 grep -G --invert-match "${whitelist}" - | stdbuf -i 0 -o 0 -e 0 grep -E "(socket|getsockopt|setsockopt|getsockname|connect|bind|send|sendto|sendmsg|recv|recvfrom|recvmsg|accept|shutdown|listen|getpeername|socketpair|accept4|recvmmsg|sendmmsg)" - | tee strace_output.txt) -f -e trace=socket,getsockopt,setsockopt,getsockname,connect,bind,send,sendto,sendmsg,recv,recvfrom,recvmsg,accept,shutdown,listen,getpeername,socketpair,accept4,recvmmsg,sendmmsg $*
+strace -f -xx -o >(stdbuf -i 0 -o 0 -e 0 grep -G --invert-match "${whitelist}" - | stdbuf -i 0 -o 0 -e 0 grep -E "(socket|getsockopt|setsockopt|getsockname|connect|bind|send|sendto|sendmsg|recv|recvfrom|recvmsg|accept|shutdown|listen|getpeername|socketpair|accept4|recvmmsg|sendmmsg)" - | tee strace_output.txt) -e trace=socket,getsockopt,setsockopt,getsockname,connect,bind,send,sendto,sendmsg,recv,recvfrom,recvmsg,accept,shutdown,listen,getpeername,socketpair,accept4,recvmmsg,sendmmsg $*
 
 if [ -s strace_output.txt ]
 then
