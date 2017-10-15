@@ -1,5 +1,7 @@
 # Heteronculous: A Proxy Leak Detector That (Hopefully) Sucks Slightly Less
 
+*For when Phidelius and Mimblewimble just won't save you from Rattus Animagus.*
+
 Heteronculous is a script that can check your code for proxy leaks.  Heteronculous can use the existing automated tests that your project runs in CI, or it can be run with manual tests.  Heteronculous doesn't require root privileges (or any interesting privileges as far as I know), nor does it require unusual kernel features like tcpdump can.
 
 ## Usage
@@ -23,7 +25,7 @@ export LEAK_CI_ALLOW_IP6_ADDR_PORT=""
 ./detect_leaks.sh ./run_tests.sh
 ~~~
 
-`./detect_leaks.sh` will return `1` if it finds any leaks (and `0` otherwise); it will also display an `strace` log of the leaks it found.
+`./detect_leaks.sh` will return an exit code of `1` if it finds any leaks (and `0` otherwise); it will also display an `strace` log of the leaks it found.
 
 Let's say that you're using multiple proxies in parallel (perhaps because Tor automatically stream-isolates different proxy ports).  You can do that like this:
 
@@ -54,6 +56,17 @@ export LEAK_CI_ALLOW_IP6_ADDR_PORT="::1
 ./detect_leaks.sh ./run_tests.sh
 ~~~
 
+Let's say your application is expected to access arbitrary ports on `127.0.0.1`.  You can use regular expressions to do this:
+
+~~~
+export LEAK_CI_ALLOW_IP_PROTOCOL=1
+export LEAK_CI_ALLOW_IP4_ADDR_PORT="127.0.0.1
+[0-9]\\+"
+export LEAK_CI_ALLOW_IP6_ADDR_PORT=""
+
+./detect_leaks.sh ./run_tests.sh
+~~~
+
 Now let's say you're going above and beyond, and only want to use Unix domain sockets (not IP) to talk to the proxy (which makes it easier for AppArmor to protect your application).  You can do that like this:
 
 ~~~
@@ -64,9 +77,25 @@ export LEAK_CI_ALLOW_IP6_ADDR_PORT=""
 ./detect_leaks.sh ./run_tests.sh
 ~~~
 
+## What's Heteronculous doing under the hood?
+
+It's using `strace` to detect usage of Linux syscalls that relate to networking.  The rest is some small Bash glue that makes it more convenient.
+
+## Does Heteronculous block leaks?
+
+**No!**  All it does is detect them, so that you can fix them yourself.  This is useful as a development and QA tool, but if you're in a situation where a proxy leak might put you in danger, don't use Heteronculous by itself.
+
+## Do transproxies like Whonix and Tails make Heteronculous obsolete?
+
+**No!**  Transproxies like the ones used in Whonix and Tails can't easily enforce stream isolation.  Without stream isolation, you are not anonymous; you are at best pseudonymous.  By far the best way to enforce stream isolation is for all applications to route traffic through Tor's SOCKS port (with SOCKS authentication).  Heteronculous is a great way to notice if an application running in Whonix is accidentally routing some traffic through the Trans port (bad!) instead of the SOCKS port.
+
 ## Status
 
 Heteronculous is very new and untested, so it's likely that you'll run into false positive warnings.  Please report them so that I can improve the code!  It's also plausible that you'll run into false negatives, although I hope it's less likely.  Please report those to me too if you run into any.  **Heteronculous may be a useful tool for noticing and debugging proxy leaks, but please don't rely on it exclusively.**
+
+## Bugs Fixed via Heteronculous
+
+* [Gajim DNS leak for SRV records](https://dev.gajim.org/gajim/gajim/issues/8538#note_180861)
 
 ## Roadmap
 
@@ -83,6 +112,12 @@ I have a bad habit of using obscure multilayered puns for naming my projects.  H
 * Pettigrew's role in the leak was discovered using the [Marauder's Map](https://www.pottermore.com/writing-by-jk-rowling/the-marauders-map), which is implemented via the *Homonculous Charm*.
 * "Homonculous" is based on a Latin word that loosely translates to "tiny artificial human"; "homo" is Latin for "human".  However, "homo" is also Greek for "same".  A proxy leak detector's primary role is to make sure that multiple identities remain separated, so naturally it makes sense to replace "homo" (same) with "hetero" (Greek for "different"), which gives us *Heteronculous*.
 * Any complaints from fundamentalist linguists about the mixing of Latin and Greek will be met with a Bat-Bogey Hex.
+
+### What's up with the slogan?
+
+* Fidelius is akin to Whonix.  It protected the Potters from simple attacks (e.g. Voldemort going looking for them, or a network router detecting your public IP address), but it spectacularly failed to protect them from more esoteric attacks (e.g. Wormtail being a spy, or correlation of identities routed through a pseudonymizing transproxy).
+* Mimblewimble is akin to code patches to fix proxy leaks.  The Potters didn't think to use it, because they didn't know Wormtail was meeting with Voldemort.  (Had the Order of the Phoenix used the Homonculous Charm on Wormtail, perhaps they would have figured it out.)  Similarly, you can't patch code that you don't know is leaking; Heteronculous lets you know that your code is leaking so that you can fix it before it leaks your secret location.
+* Coincidentally, Phidelius and Mimblewimble are the names of existing cryptography projects.  It seems that bad Harry Potter jokes are quite popular among cypherpunks.
 
 ## Credits
 
