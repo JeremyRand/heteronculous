@@ -84,7 +84,7 @@ echo "strace whitelist:
 ${whitelist}"
 echo ""
 
-strace -f -xx -o >(stdbuf -i 0 -o 0 -e 0 grep -G --invert-match "${whitelist}" - | stdbuf -i 0 -o 0 -e 0 grep -E "(socket|getsockopt|setsockopt|getsockname|connect|bind|send|sendto|sendmsg|recv|recvfrom|recvmsg|accept|shutdown|listen|getpeername|socketpair|accept4|recvmmsg|sendmmsg)" - | tee strace_output.txt) -e trace=socket,getsockopt,setsockopt,getsockname,connect,bind,send,sendto,sendmsg,recv,recvfrom,recvmsg,accept,shutdown,listen,getpeername,socketpair,accept4,recvmmsg,sendmmsg $*
+strace -f -o >(stdbuf -i 0 -o 0 -e 0 grep -G --invert-match "${whitelist}" - | stdbuf -i 0 -o 0 -e 0 grep -E "(socket|getsockopt|setsockopt|getsockname|connect|bind|send|sendto|sendmsg|recv|recvfrom|recvmsg|accept|shutdown|listen|getpeername|socketpair|accept4|recvmmsg|sendmmsg)" - | tee strace_output.txt) -e trace=socket,getsockopt,setsockopt,getsockname,connect,bind,send,sendto,sendmsg,recv,recvfrom,recvmsg,accept,shutdown,listen,getpeername,socketpair,accept4,recvmmsg,sendmmsg $*
 
 if [ -s strace_output.txt ]
 then
