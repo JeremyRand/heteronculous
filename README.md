@@ -115,8 +115,8 @@ I have a bad habit of using obscure multilayered puns for naming my projects.  H
 
 ### What's up with the slogan?
 
-* Fidelius is akin to Whonix.  It protected the Potters from simple attacks (e.g. Voldemort going looking for them, or a network router detecting your public IP address), but it spectacularly failed to protect them from more esoteric attacks (e.g. Wormtail being a spy, or correlation of identities routed through a pseudonymizing transproxy).
-* Mimblewimble is akin to code patches to fix proxy leaks.  The Potters didn't think to use it, because they didn't know Wormtail was meeting with Voldemort.  (Had the Order of the Phoenix used the Homonculous Charm on Wormtail, perhaps they would have figured it out.)  Similarly, you can't patch code that you don't know is leaking; Heteronculous lets you know that your code is leaking so that you can fix it before it leaks your secret location.
+* [Fidelius](https://www.hp-lexicon.org/magic/fidelius-charm/) is akin to Whonix.  It protected the Potters from simple attacks (e.g. Voldemort going looking for them, or a network router detecting your public IP address), but it spectacularly failed to protect them from more esoteric attacks (e.g. Pettigrew being a spy, or correlation of identities routed through a pseudonymizing transproxy).
+* [Mimblewimble](https://www.hp-lexicon.org/magic/tongue-tying-curse/) is akin to code patches to fix proxy leaks.  The Potters didn't think to use it, because they didn't know Pettigrew was meeting with Voldemort.  (Had the Order of the Phoenix used the Homonculous Charm on Pettigrew, perhaps they would have figured it out.)  Similarly, you can't patch code that you don't know is leaking; Heteronculous lets you know that your code is leaking so that you can fix it before it leaks your secret location.
 * Coincidentally, Phidelius and Mimblewimble are the names of existing cryptography projects.  It seems that bad Harry Potter jokes are quite popular among cypherpunks.
 
 ## Credits
