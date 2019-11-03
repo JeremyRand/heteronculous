@@ -129,3 +129,18 @@ I have a bad habit of using obscure multilayered puns for naming my projects.  H
 * Thanks to grarpamp on the tor-talk mailing list for an interesting conversation about this topic.
 * Thanks to Filippo Valsorda for his [list of Linux syscalls](https://filippo.io/linux-syscall-table/).
 * Thanks to [The Harry Potter Lexicon](https://www.hp-lexicon.org/) for feeding my bad pun addiction.  (Greets to Dan Kaminsky of Phidelius and Tom Elvis Jedusor of Mimblewimble!)
+
+## Licence
+
+Heteronculous is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Heteronculous is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Heteronculous.  If not, see [https://www.gnu.org/licenses/](https://www.gnu.org/licenses/).
